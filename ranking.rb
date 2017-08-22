@@ -1,13 +1,12 @@
 
 def le_melhor_pontuador
 	rank = File.read("rank.txt")
-	rank
+	melhor_pontuador = rank.split "\n"
 end
 
 def atualiza_campeao jogador, pontuacao
-	file = File.open("rank.txt")
-	file.write("#{jogador}\n#{pontuacao}")
-	file.close
+	conteudo = "#{jogador}\n#{pontuacao}"
+	File.write "rank.txt", conteudo
 end	
 
 def grava_campeao campeao_atual, jogador, pontuacao

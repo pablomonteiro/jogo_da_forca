@@ -43,7 +43,7 @@ def verifica_palavra(palavra_secreta, palavra)
 end
 
 def analisa_tentativa palavra_secreta, letra_palavra, pontuacao, erros, tentativas
-	
+
 	acertos_palavra_secreta = retorna_palavra_secreta_mascarada palavra_secreta, tentativas
 
 	if letra_palavra.size > 1
@@ -52,13 +52,15 @@ def analisa_tentativa palavra_secreta, letra_palavra, pontuacao, erros, tentativ
 		errou = verifica_letra palavra_secreta, letra_palavra
 		existe_lacunas = acertos_palavra_secreta.count("_") > 0
 		fim_de_jogo = !existe_lacunas
-		exibe_chutes_acertados acertos_palavra_secreta
+		exibe_palavra_mascarada acertos_palavra_secreta
 	end
 
 	if errou
 		pontuacao = calcula_pontuacao pontuacao 
 		erros += 1
 	end
+
+	desenha_forca erros
 
 	return pontuacao, erros, fim_de_jogo
 end 
@@ -81,15 +83,17 @@ def jogo
 	campeao = le_melhor_pontuador
 
 	if !campeao.empty?
-		exibeInformacaoDoCampeao campeao
+		exibe_informacao_do_campeao campeao
 	end
 
 	palavra_secreta = seleciona_palavra_secreta
+	tentativas = []
 	exibe_escolha_palavra_secreta palavra_secreta
+	exibe_palavra_mascarada(retorna_palavra_secreta_mascarada palavra_secreta, tentativas)
 	vidas = 5
 	erros = 0
 	pontuacao = 1000
-	tentativas = []
+	
 	exibe_saudacao_para_comecar
 	while erros < vidas
 		chances = vidas - erros
@@ -103,10 +107,15 @@ def jogo
 		exibe_total_de_chances chances
 
 		tentativas << letra_palavra
+
+		exibe_tentativas tentativas
 		
 		pontuacao, erros, acertou = analisa_tentativa palavra_secreta, letra_palavra, pontuacao, erros, tentativas
 
-		break if acertou
+		if acertou
+			avisa_acertou_palavra
+			break 
+		end
 
 		exibe_total_de_erros erros
 	end
